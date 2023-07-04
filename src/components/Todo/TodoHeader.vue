@@ -11,12 +11,16 @@
 
 <style scoped></style>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 
 const text = ref('')
 
-const emit = defineEmits(['add-todo'])
+interface Emits {
+  (e: 'add-todo', str: string): void
+}
+
+const emit = defineEmits<Emits>()
 function addTodo() {
   emit('add-todo', text.value)
   text.value = ''

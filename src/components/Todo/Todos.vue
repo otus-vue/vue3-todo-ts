@@ -15,8 +15,13 @@
 
 <style scoped></style>
 
-<script setup>
+<script setup lang="ts">
 import TodoItem from '@/components/Todo/TodoItem.vue';
+import type { Todo } from "@/interfaces";
 
-const props = defineProps(['todos'])
+interface TodosProps {
+  todos: Todo[]
+}
+
+const props = defineProps<TodosProps>()
 </script>

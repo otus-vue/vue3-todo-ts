@@ -18,11 +18,13 @@
 
 <script setup lang="ts">
 import TodoHeader from '@/components/Todo/TodoHeader.vue';
-import Todos from '@/components/Todo/Todos.vue';
 import TodoFooter from '@/components/Todo/TodoFooter.vue';
-import { computed, ref } from 'vue';
+import {computed, ref} from 'vue';
+import type { Ref } from 'vue'
+import type { Todo } from "@/interfaces";
+import { Mode } from "@/interfaces";
 
-const todos = ref([
+const todos = ref<Todo[]>([
   {
     id: 1,
     text: 'first todo',
@@ -38,34 +40,32 @@ const todos = ref([
   },
 ])
 
-const Mode = {
-  all: 'all',
-  active: 'active',
-  completed: 'completed'
-}
-
-const currentMode = ref(Mode.all)
+const currentMode = ref(Mode.All)
 
 const viewTodo = computed(() =>
     filterTodoByMode(todos.value, currentMode))
 
-function filterTodoByMode(todos, mode) {
+function filterTodoByMode(todos: Todo[], mode: Ref<Mode>) {
   switch (mode.value) {
-    case Mode.all: return todos;
-    case Mode.active: return todos.filter(t => !t.isCompleted)
-    case Mode.completed: return todos.filter(t => t.isCompleted)
+    case Mode.All: return todos;
+    case Mode.Active: return todos.filter(t => !t.isCompleted)
+    case Mode.Completed: return todos.filter(t => t.isCompleted)
   }
 }
 
-function setIsCompleted({ id, val }) {
-  todos.value.find(todo => todo.id === id).isCompleted = val
+function setIsCompleted({ id, val }: {id: number, val: boolean}) {
+  const todo = todos.value.find(todo => todo.id === id)
+  if (todo)
+    todo.isCompleted = val
+  else
+    throw new Error('Undefined todo')
 }
 
 function clearCompleted() {
   todos.value = todos.value.filter(t => !t.isCompleted)
 }
 
-function addTodo(text) {
+function addTodo(text: string) {
   todos.value.push({ id: todos.value.length + 1, text, isCompleted: false })
 }
 

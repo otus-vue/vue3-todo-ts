@@ -14,10 +14,20 @@
 
 <style scoped></style>
 
-<script setup>
-const props = defineProps(['todo'])
+<script setup lang="ts">
+import type { Todo } from "@/interfaces";
 
-const emit = defineEmits()
+interface Props {
+  todo: Todo
+}
+const props = defineProps<Props>()
+
+interface Emits {
+  (e: 'set-is-completed', isCompleted: boolean): void
+  (e: 'asdfg', todo: Todo): void
+}
+
+const emit = defineEmits<Emits>()
 function setIsCompleted() {
   emit('set-is-completed', !props.todo.isCompleted)
 }

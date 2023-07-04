@@ -18,6 +18,9 @@
 
 <style scoped></style>
 
-<script setup>
-  const props = defineProps(['count'])
+<script setup lang="ts">
+interface Props {
+  count: number
+}
+  const props = defineProps<Props>()
 </script>
